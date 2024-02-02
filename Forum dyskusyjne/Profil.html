@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Użytkownika - Forum Dyskusyjne</title>
+    <style>
+        body {
+            background-color: #e9ecef;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        #content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .user-info, .user-posts {
+            margin-bottom: 30px;
+        }
+        .user-info h2, .user-posts h2 {
+            color: #343a40;
+            margin-bottom: 15px;
+        }
+        .user-info p, .user-posts p {
+            margin-bottom: 10px;
+        }
+        .post {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Profil Użytkownika</h1>
+    </header>
+    <div id="content">
+        <div class="user-info">
+            <h2>Informacje o Użytkowniku</h2>
+            <p>Imię: Jan Kowalski</p>
+            <p>Data dołączenia: 2023-01-01</p>
+            <p>Liczba postów: 120</p>
+        </div>
+        <div class="user-posts">
+            <h2>Ostatnie Posty</h2>
+            <div class="post">
+                <p>Tytuł postu 1</p>
+                <p>Data: 2023-02-15</p>
+            </div>
+            <div class="post">
+                <p>Tytuł postu 2</p>
+                <p>Data: 2023-02-10</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

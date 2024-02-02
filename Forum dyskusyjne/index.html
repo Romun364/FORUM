@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- <link rel="stylesheet" type="text/css" href="style.css">  -->
+    <title>Forum Dyskusyjne</title>
+    <style>
+        body {
+            background-image: url('images/tlo.jpg');
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+        #content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        label, input, textarea {
+            margin-bottom: 10px;
+        }
+        input, textarea {
+            padding: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #23c230;
+            
+        }
+        .thread {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: #ff0000;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Forum Dyskusyjne</h1>
+    </header>
+    <form id="registrationForm" style="display: none;">
+        <h2>Rejestracja</h2>
+        <label for="regUsername">Nazwa użytkownika:</label>
+        <input type="text" id="regUsername" required>
+        <label for="regPassword">Hasło:</label>
+        <input type="password" id="regPassword" required>
+        <input type="submit" value="Zarejestruj">
+    </form>
+    <div id="content">
+        <form id="loginForm">
+            <h2>Logowanie</h2>   
+            <label for="username">Nazwa użytkownika:</label>
+            <input type="text" id="username" required>
+            <label for="password">Hasło:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Zaloguj</button>
+        </form>
+
+        <div id="forum" style="display: none;">
+            <h2>Nowy wątek</h2>
+            <form id="threadForm">
+                <label for="threadTitle">Tytuł:</label>
+                <input type="text" id="threadTitle" required>
+                <label for="postContent">Treść:</label>
+                <textarea id="postContent" rows="4" required></textarea>
+                <button type="submit">Dodaj wątek</button>
+            </form>
+
+            <h2>Forum</h2>
+            <div id="threads"></div>
+        </div>
+    </div>
+    <script>
+        const sql = require('mssql');
+
+        const config = {
+            user: 'LAPTOP-9E9HH270\\Roman',
+            password: '',
+            server: 'LAPTOP-9E9HH270\\SQLEXPRESS',
+            database: 'ForumDatabase',
+            options: {
+                encrypt: true
+            }
+        };
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const regUsername = document.getElementById('regUsername').value;
+            const regPassword = document.getElementById('regPassword').value;
+
+            sql.connect(config, err => {
+                if (err) {
+                    console.error('Błąd połączenia z bazą danych:', err);
+                    return;
+                }
+
+                const request = new sql.Request();
+
+                request.query(`INSERT INTO Users (username, password) VALUES ('${regUsername}', '${regPassword}')`, (err, result) => {
+                    if (err) {
+                        console.error('Błąd dodawania użytkownika:', err);
+                    } else {
+                        console.log('Rejestracja udana!');
+                        alert(`Rejestracja udana!\nNazwa użytkownika: ${regUsername}\nHasło: ${regPassword}`);
+                    }
+
+                    sql.close();
+                });
+            });
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            sql.connect(config, err => {
+                if (err) {
+                    console.error('Błąd połączenia z bazą danych:', err);
+                    return;
+                }
+
+                const request = new sql.Request();
+
+                request.query(`SELECT * FROM Users WHERE username = '${username}' AND password = '${password}'`, (err, result) => {
+                    if (err) {
+                        console.error('Błąd zapytania:', err);
+                    } else {
+                        if (result.recordset.length > 0) {
+                            alert(`Zalogowano!\nNazwa użytkownika: ${username}`);
+                            // Ukrywamy formularz logowania i pokazujemy forum
+                            document.getElementById('loginForm').style.display = 'none';
+                            document.getElementById('forum').style.display = 'block';
+                        } else {
+                            alert('Błędne dane logowania.');
+                        }
+                    }
+
+                    sql.close();
+                });
+            });
+        });
+
+        document.getElementById('threadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const threadTitle = document.getElementById('threadTitle').value;
+            const postContent = document.getElementById('postContent').value;
+
+            // Połączenie z bazą danych i dodanie nowego wątku
+            sql.connect(config, err => {
+                if (err) {
+                    console.error('Błąd połączenia z bazą danych:', err);
+                    return;
+                }
+
+                const request = new sql.Request();
+
+                request.query(`INSERT INTO Threads (title, content) VALUES ('${threadTitle}', '${postContent}')`, (err, result) => {
+                    if (err) {
+                        console.error('Błąd dodawania wątku:', err);
+                    } else {
+                        console.log('Dodano nowy wątek!');
+                        const threadElement = document.createElement('div');
+                        threadElement.classList.add('thread');
+                        threadElement.innerHTML = `<h3>${threadTitle}</h3><p>${postContent}</p>`;
+                        document.getElementById('threads').appendChild(threadElement);
+                    }
+
+                    sql.close();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

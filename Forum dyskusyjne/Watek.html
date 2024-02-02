@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wątek Dyskusyjny - Forum Dyskusyjne</title>
+    <style>
+        body {
+            background-image: url('images/tlo.jpg');
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+        #content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        label, textarea {
+            margin-bottom: 10px;
+        }
+        textarea {
+            padding: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #23c230;
+        }
+        .thread {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: #ff0000;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Wątek Dyskusyjny</h1>
+    </header>
+    <div id="content">
+        <section id="threadContent">
+            <h2>Tytuł Wątku</h2>
+            <p>Treść pierwszego posta w wątku...</p>
+        </section>
+        <form id="replyForm">
+            <h3>Odpowiedz</h3>
+            <label for="replyContent">Twoja wiadomość:</label>
+            <textarea id="replyContent" rows="4" required></textarea>
+            <button type="submit">Wyślij</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('replyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const replyContent = document.getElementById('replyContent').value;
+            console.log("Wysłano odpowiedź:", replyContent);
+        });
+    </script>
+</body>
+</html>
